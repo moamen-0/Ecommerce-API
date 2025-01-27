@@ -1,6 +1,8 @@
 
 using Core.Entities;
 using Core.Interfaces;
+using Core.Specifications;
+using Core.Specifications.Product_Specs;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +27,8 @@ namespace ECommerceApi.Controllers
 		[HttpGet]
 		public async Task<ActionResult<List<Product>>> GetProducts()
 		{
-			var products = await _repo.GetAllAsync();
+			var spec = new ProductWithBrandAndTypeSpecifications();
+			var products = await _repo.GetAllWithSpecAsync(spec);
 
 			if (products == null || products.Count() == 0)
 			{
@@ -40,7 +43,8 @@ namespace ECommerceApi.Controllers
 		[HttpGet("{id}")]
  		public async Task<ActionResult<Product>> GetProduct(int id)
 		{
-			var product = await _repo.GetAsync(id);
+			var spec = new ProductWithBrandAndTypeSpecifications(id);
+			var product = await _repo.GetWithSpecAsync(spec);
 			if (product == null)
 			{
 				return NotFound("Product not found.");
