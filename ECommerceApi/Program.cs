@@ -1,5 +1,6 @@
 
 using Core.Interfaces;
+using ECommerceApi.Helpers;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,8 @@ namespace api
 
 
 			builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
+
+			builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
 			//builder.Services.AddScoped<IProductRepository, ProductRepository>();
 			var app = builder.Build();

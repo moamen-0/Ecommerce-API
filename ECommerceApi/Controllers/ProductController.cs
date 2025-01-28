@@ -1,8 +1,10 @@
 
+using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
 using Core.Specifications.Product_Specs;
+using ECommerceApi.Dtos;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,15 +19,16 @@ namespace ECommerceApi.Controllers
 
 		//private readonly IProductRepository _repo;
 		private readonly IGenericRepository<Product> _repo;
+		private readonly IMapper _mapper;
 
-		public ProductController(IGenericRepository<Product> productRepository)
+		public ProductController(IGenericRepository<Product> productRepository,IMapper mapper)
 		{
 			_repo = productRepository;
-
+			_mapper = mapper;
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<List<Product>>> GetProducts()
+		public async Task<ActionResult<IEnumerable<ProductToReturnDto>>> GetProducts()
 		{
 			var spec = new ProductWithBrandAndTypeSpecifications();
 			var products = await _repo.GetAllWithSpecAsync(spec);
@@ -35,13 +38,13 @@ namespace ECommerceApi.Controllers
 				return NotFound("No products found.");
 			}
 
-			return Ok(products);
+			return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDto>>(products));
 		}
 
 
 
 		[HttpGet("{id}")]
- 		public async Task<ActionResult<Product>> GetProduct(int id)
+ 		public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
 		{
 			var spec = new ProductWithBrandAndTypeSpecifications(id);
 			var product = await _repo.GetWithSpecAsync(spec);
@@ -49,7 +52,7 @@ namespace ECommerceApi.Controllers
 			{
 				return NotFound("Product not found.");
 			}
-			return Ok(product);
+			return Ok(_mapper.Map<Product,ProductToReturnDto>(product));
 		}
 		[HttpPost]
 		public IActionResult Post()
