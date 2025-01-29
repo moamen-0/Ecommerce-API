@@ -19,7 +19,7 @@ namespace Infrastructure.Data
 					_context = context;
 		}
 
-		public async Task<IEnumerable<T>> GetAllWithSpecAsync()
+		public async Task<IReadOnlyList<T>> GetAllWithSpecAsync()
 		{
 			//if (typeof(T) == typeof(Product)) {
 
@@ -31,7 +31,11 @@ namespace Infrastructure.Data
 			return await _context.Set<T>().AsNoTracking().ToListAsync();
 
 		}
+		public async Task<IReadOnlyList<T>> GetAllAsync() {
+				
+			return await _context.Set<T>().ToListAsync();
 
+		}
 
 		public async Task<T?> GetAsync(int id)
 		{
@@ -47,7 +51,7 @@ namespace Infrastructure.Data
 			return await _context.Set<T>().FindAsync(id);
 		}
 
-		public async Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecifications<T> spec)
+		public async Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> spec)
 		{
 			return await ApplySpecification(spec).AsNoTracking().ToListAsync();
 		}

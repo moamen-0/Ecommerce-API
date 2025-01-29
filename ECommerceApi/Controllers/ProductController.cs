@@ -19,18 +19,26 @@ namespace ECommerceApi.Controllers
 
 		//private readonly IProductRepository _repo;
 		private readonly IGenericRepository<Product> _repo;
+		private readonly IGenericRepository<ProductBrand> _brandRepo;
+		private readonly IGenericRepository<ProductType> _typeRepo;
 		private readonly IMapper _mapper;
 
-		public ProductController(IGenericRepository<Product> productRepository,IMapper mapper)
+		public ProductController(
+			IGenericRepository<Product> productRepository,
+			IMapper mapper,
+			IGenericRepository<ProductBrand> brandRepo,
+			IGenericRepository<ProductType> typeRepo)
 		{
 			_repo = productRepository;
 			_mapper = mapper;
+			_brandRepo = brandRepo;
+			_typeRepo = typeRepo;
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<ProductToReturnDto>>> GetProducts()
+		public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts(string? sort)
 		{
-			var spec = new ProductWithBrandAndTypeSpecifications();
+			var spec = new ProductWithBrandAndTypeSpecifications(sort);
 			var products = await _repo.GetAllWithSpecAsync(spec);
 
 			if (products == null || products.Count() == 0)
@@ -38,7 +46,7 @@ namespace ECommerceApi.Controllers
 				return NotFound("No products found.");
 			}
 
-			return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDto>>(products));
+			return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products));
 		}
 
 
@@ -54,6 +62,33 @@ namespace ECommerceApi.Controllers
 			}
 			return Ok(_mapper.Map<Product,ProductToReturnDto>(product));
 		}
+
+
+		[HttpGet("brands")]
+		public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
+		{
+			var brands = await _brandRepo.GetAllAsync();
+			
+			if (brands == null || brands.Count() == 0)
+			{
+				return NotFound("No brands found.");
+			}
+			return Ok(brands);
+		}
+
+
+		[HttpGet("types")]
+		public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
+		{
+			var types = await _typeRepo.GetAllWithSpecAsync();
+			if (types == null || types.Count() == 0)
+			{
+				return NotFound("No types found.");
+			}
+			return Ok(types);
+		}
+
+
 		[HttpPost]
 		public IActionResult Post()
 		{

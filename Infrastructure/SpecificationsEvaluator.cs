@@ -18,6 +18,14 @@ namespace Infrastructure
 			{
 				query = query.Where(specifications.Criteria);
 			}
+			if (specifications.OrderBy != null)
+			{
+				query = query.OrderBy(specifications.OrderBy);
+			}
+			if (specifications.OrderByDesc != null)
+			{
+				query = query.OrderByDescending(specifications.OrderByDesc);
+			}
 			query = specifications.Includes.Aggregate(query, (current, include) => current.Include(include));
 			return query;
 		}

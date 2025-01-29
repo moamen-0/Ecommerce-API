@@ -9,10 +9,36 @@ namespace Core.Specifications.Product_Specs
 {
 	public class ProductWithBrandAndTypeSpecifications : BaseSpecifications<Product>
 	{
-		public ProductWithBrandAndTypeSpecifications() : base() {
+		public ProductWithBrandAndTypeSpecifications(string sort) : base() {
 
 			Includes.Add(x => x.ProductBrand);
 			Includes.Add(x => x.ProductType);
+
+			if (!string.IsNullOrEmpty(sort))
+			{
+				switch (sort)
+				{
+					case "priceAsc":
+						OrderBy = x => x.Price;
+
+						break;
+					case "priceDesc":
+						OrderByDesc = x => x.Price;
+						break;
+					default:
+						OrderBy = x => x.Name;
+						break;
+				}
+
+			}
+			else
+			{
+				OrderBy = x => x.Name;
+			}
+
+
+
+
 		}
 
 		public ProductWithBrandAndTypeSpecifications(int id) : base(x => x.Id == id)
