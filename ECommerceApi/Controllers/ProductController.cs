@@ -36,9 +36,9 @@ namespace ECommerceApi.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts(string? sort,int? brand,int? type)
+		public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts([FromQuery] ProductSpecParams specParams)
 		{
-			var spec = new ProductWithBrandAndTypeSpecifications(sort,brand,type);
+			var spec = new ProductWithBrandAndTypeSpecifications(specParams);
 			var products = await _repo.GetAllWithSpecAsync(spec);
 
 			if (products == null || products.Count() == 0)

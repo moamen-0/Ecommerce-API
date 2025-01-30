@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,19 +10,19 @@ namespace Core.Specifications.Product_Specs
 {
 	public class ProductWithBrandAndTypeSpecifications : BaseSpecifications<Product>
 	{
-		public ProductWithBrandAndTypeSpecifications(string? sort,int? brandId,int? typeId) : base(
+		public ProductWithBrandAndTypeSpecifications(ProductSpecParams specParams) : base(
 			
 			x => 
-			(!brandId.HasValue || x.ProductBrandId==brandId  ) && (!typeId.HasValue||x.ProductTypeId==typeId)
+			(!specParams.BrandId.HasValue || x.ProductBrandId== specParams.BrandId  ) && (!specParams.TypeId.HasValue||x.ProductTypeId== specParams.TypeId)
 
 			) {
 
 			Includes.Add(x => x.ProductBrand);
 			Includes.Add(x => x.ProductType);
 
-			if (!string.IsNullOrEmpty(sort))
+			if (!string.IsNullOrEmpty(specParams.sort))
 			{
-				switch (sort)
+				switch (specParams.sort)
 				{
 					case "priceAsc":
 						OrderBy = x => x.Price;
@@ -41,10 +42,13 @@ namespace Core.Specifications.Product_Specs
 				OrderBy = x => x.Name;
 			}
 
-
+		ApplyPagination((specParams.PageIndex - 1) * specParams.PageSize, specParams.PageSize);
+			
 
 
 		}
+		
+
 
 		public ProductWithBrandAndTypeSpecifications(int id) : base(x => x.Id == id)
 		{
