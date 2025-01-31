@@ -1,4 +1,4 @@
-# eCommerce API
+# ECommerce API
 
 ## Overview
 This is a powerful and scalable eCommerce API built using **ASP.NET Core**. The API provides essential functionalities for managing an online store, including product listings, user authentication, cart management, order processing, and payment handling.
