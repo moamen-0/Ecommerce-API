@@ -6,7 +6,7 @@ namespace ECommerceApi.Helpers
 	{
 		
 
-		public Pagination(int pageIndex, int pageSize, IReadOnlyList<T> data,int count)
+		public Pagination(int pageIndex, int pageSize,int count, IReadOnlyList<T> data)
 		{
 			PageIndex = pageIndex;
 			PageSize = pageSize;

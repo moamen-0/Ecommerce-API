@@ -52,7 +52,7 @@ namespace ECommerceApi.Controllers
 
 			var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products);
 
-			return Ok(new Pagination<ProductToReturnDto>(specParams.PageIndex, specParams.PageSize,data,count));
+			return Ok(new Pagination<ProductToReturnDto>(specParams.PageIndex, specParams.PageSize,count,data));
 		}
 
 
