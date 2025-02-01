@@ -21,7 +21,6 @@ namespace Core.Specifications.Product_Specs
 		public string? sort { get; set; }
 		public int? skip { get; set; }
 		public int? take { get; set; }
-		
 		public bool InPagination { get; set; }
 
 

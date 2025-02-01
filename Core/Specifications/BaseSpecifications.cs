@@ -29,9 +29,9 @@ namespace Core.Specifications
 
 		public void ApplyPagination(int skip,int take) {
 
+			IsPagination = true;
 			Skip = skip;
 			Take = take;
-			IsPagination = true;
 
 		}
 

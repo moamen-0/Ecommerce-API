@@ -5,6 +5,7 @@ using Core.Interfaces;
 using Core.Specifications;
 using Core.Specifications.Product_Specs;
 using ECommerceApi.Dtos;
+using ECommerceApi.Helpers;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,7 @@ namespace ECommerceApi.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts([FromQuery] ProductSpecParams specParams)
+		public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts([FromQuery] ProductSpecParams specParams)
 		{
 			var spec = new ProductWithBrandAndTypeSpecifications(specParams);
 			var products = await _repo.GetAllWithSpecAsync(spec);
@@ -46,7 +47,12 @@ namespace ECommerceApi.Controllers
 				return NotFound("No products found.");
 			}
 
-			return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products));
+			var countSpec = new ProductCountSpecifications(specParams);
+			var count = await _repo.GetCountAsync(countSpec);
+
+			var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products);
+
+			return Ok(new Pagination<ProductToReturnDto>(specParams.PageIndex, specParams.PageSize,data,count));
 		}
 
 

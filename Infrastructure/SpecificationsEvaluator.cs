@@ -26,8 +26,13 @@ namespace Infrastructure
 			{
 				query = query.OrderByDescending(specifications.OrderByDesc);
 			}
+			if (specifications.IsPagination)
+			{
+				query = query.Skip(specifications.Skip).Take(specifications.Take);
+			}
 			query = specifications.Includes.Aggregate(query, (current, include) => current.Include(include));
 			return query;
+
 		}
 	}
 }
