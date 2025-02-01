@@ -24,11 +24,11 @@ namespace Core.Specifications.Product_Specs
 		public bool InPagination { get; set; }
 
 
-		//private string? _search;
-		//public string? Search
-		//{
-		//	get => _search;
-		//	set => _search = value.ToLower();
-		//}
+		private string? _search;
+		public string? Search
+		{
+			get => _search;
+			set => _search = value.ToLower();
+		}
 	}
 }
