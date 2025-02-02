@@ -3,6 +3,7 @@ using Core.Interfaces;
 using ECommerceApi.Helpers;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace api
 {
@@ -22,8 +23,14 @@ namespace api
 			builder.Services.AddDbContext<ApplicationDbContext>(options =>
 			  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+			builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
+			{
+				var configuration = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"), true);
+				return ConnectionMultiplexer.Connect(configuration);
+			});
 
 			builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
+			builder.Services.AddScoped(typeof(IBasketRepository),typeof(BasketRepository));
 
 			builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
