@@ -2,6 +2,7 @@
 using Core.Interfaces;
 using ECommerceApi.Helpers;
 using Infrastructure.Data;
+using Infrastructure.Data._Identity;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 
@@ -22,6 +23,9 @@ namespace api
 			builder.Services.AddSwaggerGen();
 			builder.Services.AddDbContext<ApplicationDbContext>(options =>
 			  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+			builder.Services.AddDbContext<StoreIdentityDbContext>(options =>
+				options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection")));
 
 			builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
 			{
