@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Data._Identity.Migrations
 {
     /// <inheritdoc />
-    public partial class Identity06Migration : Migration
+    public partial class AddRolesSupport2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -1,9 +1,11 @@
 
 using Core.Entities.identity;
 using Core.Interfaces;
+using Core.IServices;
 using ECommerceApi.Helpers;
 using Infrastructure.Data;
 using Infrastructure.Data._Identity;
+using Infrastructure.Services;
 using Infrastructure.Data._Identity.Seeds;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +32,10 @@ namespace api
 			builder.Services.AddDbContext<StoreIdentityDbContext>(options =>
 				options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection")));
 
+			builder.Configuration.GetSection("JwtSettings").Bind(builder.Configuration.GetSection("JwtSettings").Value);
+
+
+
 			builder.Services.AddIdentityCore<ApplicationUser>(opt=>
 				{ }
 				)
@@ -42,6 +48,7 @@ namespace api
 				var configuration = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"), true);
 				return ConnectionMultiplexer.Connect(configuration);
 			});
+			builder.Services.AddScoped(typeof(IAuthService), typeof(AuthService));
 
 			builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
 			builder.Services.AddScoped(typeof(IBasketRepository),typeof(BasketRepository));
@@ -75,7 +82,7 @@ namespace api
 
 				context.Database.MigrateAsync();
 				identityContext.Database.MigrateAsync();
-				AppIdentityDbContextSeed.SeedUsersAsync(userManager).Wait();
+				//AppIdentityDbContextSeed.SeedUsersAsync(userManager).Wait();
 			}
 			catch (Exception ex)
 			{

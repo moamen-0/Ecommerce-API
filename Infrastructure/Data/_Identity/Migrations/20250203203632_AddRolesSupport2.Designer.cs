@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data._Identity.Migrations
 {
     [DbContext(typeof(StoreIdentityDbContext))]
-    [Migration("20250203033658_Identity06Migration")]
-    partial class Identity06Migration
+    [Migration("20250203203632_AddRolesSupport2")]
+    partial class AddRolesSupport2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
