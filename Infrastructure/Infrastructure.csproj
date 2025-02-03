@@ -27,7 +27,6 @@
     <Folder Include="Data\SeedData\" />
     <Folder Include="Data\_Identity\Interceptors\" />
     <Folder Include="Data\_Identity\Migrations\" />
-    <Folder Include="Data\_Identity\Seeds\" />
   </ItemGroup>
 
 </Project>

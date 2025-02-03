@@ -9,7 +9,7 @@ namespace Core.Entities.identity
 {
 	public class ApplicationUser : IdentityUser
 	{
-		public required string DisplayName { get; set; }
-		public Address? Address { get; set; }
+		public string DisplayName { get; set; }
+		public Address Address { get; set; }
 	}
 }

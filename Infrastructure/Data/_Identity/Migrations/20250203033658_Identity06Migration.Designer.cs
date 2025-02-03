@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data._Identity.Migrations
 {
     [DbContext(typeof(StoreIdentityDbContext))]
-    [Migration("20250203010151_Identity01Migration")]
-    partial class Identity01Migration
+    [Migration("20250203033658_Identity06Migration")]
+    partial class Identity06Migration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -109,10 +109,6 @@ namespace Infrastructure.Data._Identity.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AppUserId1")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -141,8 +137,6 @@ namespace Infrastructure.Data._Identity.Migrations
 
                     b.HasIndex("AppUserId")
                         .IsUnique();
-
-                    b.HasIndex("AppUserId1");
 
                     b.ToTable("Addresses", (string)null);
                 });
@@ -370,15 +364,9 @@ namespace Infrastructure.Data._Identity.Migrations
 
             modelBuilder.Entity("Core.Entities.identity.Address", b =>
                 {
-                    b.HasOne("Core.Entities.identity.ApplicationUser", null)
+                    b.HasOne("Core.Entities.identity.ApplicationUser", "AppUser")
                         .WithOne("Address")
                         .HasForeignKey("Core.Entities.identity.Address", "AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Core.Entities.identity.ApplicationUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -438,7 +426,8 @@ namespace Infrastructure.Data._Identity.Migrations
 
             modelBuilder.Entity("Core.Entities.identity.ApplicationUser", b =>
                 {
-                    b.Navigation("Address");
+                    b.Navigation("Address")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

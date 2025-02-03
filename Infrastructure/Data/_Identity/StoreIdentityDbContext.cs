@@ -11,22 +11,15 @@ namespace Infrastructure.Data._Identity
 {
 	public class StoreIdentityDbContext : IdentityDbContext<ApplicationUser>
 	{
-
-
 		public StoreIdentityDbContext(DbContextOptions<StoreIdentityDbContext> options) : base(options)
 		{
-
 		}
+
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
 			builder.ApplyConfigurationsFromAssembly(typeof(StoreIdentityDbContext).Assembly);
-
 		}
-
-
-
-
 	}
-	
+
 }

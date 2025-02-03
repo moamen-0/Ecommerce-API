@@ -20,7 +20,13 @@ namespace Infrastructure.Data._Identity.Config
 			builder.Property(p => p.City).IsRequired();
 			builder.Property(p => p.State).IsRequired();
 			builder.Property(p => p.Zipcode).IsRequired();
+
+			builder.HasOne(a => a.AppUser)
+				   .WithOne(u => u.Address)
+				   .HasForeignKey<Address>(a => a.AppUserId)
+				   .OnDelete(DeleteBehavior.Cascade);
+
+
 		}
 	}
-	
 }

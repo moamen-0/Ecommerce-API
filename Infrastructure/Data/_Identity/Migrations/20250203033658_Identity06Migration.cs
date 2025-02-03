@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Data._Identity.Migrations
 {
     /// <inheritdoc />
-    public partial class Identity01Migration : Migration
+    public partial class Identity06Migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -110,8 +110,7 @@ namespace Infrastructure.Data._Identity.Migrations
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     State = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Zipcode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AppUserId1 = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -119,12 +118,6 @@ namespace Infrastructure.Data._Identity.Migrations
                     table.ForeignKey(
                         name: "FK_Addresses_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Addresses_AspNetUsers_AppUserId1",
-                        column: x => x.AppUserId1,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -250,11 +243,6 @@ namespace Infrastructure.Data._Identity.Migrations
                 table: "Addresses",
                 column: "AppUserId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Addresses_AppUserId1",
-                table: "Addresses",
-                column: "AppUserId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

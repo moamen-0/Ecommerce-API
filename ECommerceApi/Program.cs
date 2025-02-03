@@ -1,8 +1,11 @@
 
+using Core.Entities.identity;
 using Core.Interfaces;
 using ECommerceApi.Helpers;
 using Infrastructure.Data;
 using Infrastructure.Data._Identity;
+using Infrastructure.Data._Identity.Seeds;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 
@@ -27,6 +30,13 @@ namespace api
 			builder.Services.AddDbContext<StoreIdentityDbContext>(options =>
 				options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection")));
 
+			builder.Services.AddIdentityCore<ApplicationUser>(opt=>
+				{ }
+				)
+				.AddEntityFrameworkStores<StoreIdentityDbContext>()
+				.AddSignInManager<SignInManager<ApplicationUser>>()				;
+			builder.Services.AddAuthentication();
+			builder.Services.AddAuthorization();
 			builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
 			{
 				var configuration = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"), true);
@@ -57,10 +67,15 @@ namespace api
 			using var scope = app.Services.CreateScope();
 			var services = scope.ServiceProvider;
 			var context = services.GetRequiredService<ApplicationDbContext>();
+			var identityContext = services.GetRequiredService<StoreIdentityDbContext>();
+			var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 			var logger = services.GetRequiredService<ILogger<Program>>();
 			try
 			{
+
 				context.Database.MigrateAsync();
+				identityContext.Database.MigrateAsync();
+				AppIdentityDbContextSeed.SeedUsersAsync(userManager).Wait();
 			}
 			catch (Exception ex)
 			{
