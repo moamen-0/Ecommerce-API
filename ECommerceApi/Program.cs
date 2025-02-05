@@ -1,4 +1,4 @@
-
+﻿
 using Core.Entities.identity;
 using Core.Interfaces;
 using Core.IServices;
@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.OpenApi.Models;
 
 namespace api
 {
@@ -34,7 +35,7 @@ namespace api
 			builder.Services.AddDbContext<StoreIdentityDbContext>(options =>
 				options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection")));
 
-			builder.Configuration.GetSection("JwtSettings").Bind(builder.Configuration.GetSection("JwtSettings").Value);
+			builder.Configuration.GetSection("Jwt").Bind(builder.Configuration.GetSection("Jwt").Value);
 
 
 
@@ -81,6 +82,36 @@ namespace api
 			builder.Services.AddScoped(typeof(IBasketRepository),typeof(BasketRepository));
 
 			builder.Services.AddAutoMapper(typeof(MappingProfiles));
+			builder.Services.AddEndpointsApiExplorer();
+			builder.Services.AddSwaggerGen(options =>
+			{
+				// إضافة زر "Authorize" في Swagger UI
+				options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+				{
+					Name = "Authorization",
+					Type = SecuritySchemeType.Http,
+					Scheme = "Bearer",
+					BearerFormat = "JWT",
+					In = ParameterLocation.Header,
+					Description = "Bearer {your token here}"
+				});
+
+				// تفعيل المصادقة في Swagger
+				options.AddSecurityRequirement(new OpenApiSecurityRequirement
+	{
+		{
+			new OpenApiSecurityScheme
+			{
+				Reference = new OpenApiReference
+				{
+					Type = ReferenceType.SecurityScheme,
+					Id = "Bearer"
+				}
+			},
+			new string[] {}
+		}
+	});
+			});
 
 			//builder.Services.AddScoped<IProductRepository, ProductRepository>();
 			var app = builder.Build();
@@ -95,7 +126,7 @@ namespace api
 			app.UseStaticFiles();
 
 			app.UseAuthorization();
-
+			app.UseAuthentication();
 			app.MapControllers();
 
 			using var scope = app.Services.CreateScope();

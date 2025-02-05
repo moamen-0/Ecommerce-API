@@ -17,6 +17,7 @@ namespace ECommerceApi.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class ProductController : ControllerBase
 	{
 
@@ -37,7 +38,6 @@ namespace ECommerceApi.Controllers
 			_brandRepo = brandRepo;
 			_typeRepo = typeRepo;
 		}
-		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		[HttpGet]
 		public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts([FromQuery] ProductSpecParams specParams)
 		{
