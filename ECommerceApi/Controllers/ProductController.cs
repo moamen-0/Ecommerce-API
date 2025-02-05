@@ -7,6 +7,8 @@ using Core.Specifications.Product_Specs;
 using ECommerceApi.Dtos;
 using ECommerceApi.Helpers;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +37,7 @@ namespace ECommerceApi.Controllers
 			_brandRepo = brandRepo;
 			_typeRepo = typeRepo;
 		}
-
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		[HttpGet]
 		public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts([FromQuery] ProductSpecParams specParams)
 		{

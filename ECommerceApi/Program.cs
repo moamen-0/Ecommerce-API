@@ -10,6 +10,8 @@ using Infrastructure.Data._Identity.Seeds;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace api
 {
@@ -40,9 +42,34 @@ namespace api
 				{ }
 				)
 				.AddEntityFrameworkStores<StoreIdentityDbContext>()
-				.AddSignInManager<SignInManager<ApplicationUser>>()				;
-			builder.Services.AddAuthentication();
+				.AddSignInManager<SignInManager<ApplicationUser>>()	;
+
+
+			builder.Services.AddAuthentication("Bearer");
+
+			builder.Services.AddAuthentication((authOptions) =>
+			{
+				authOptions.DefaultAuthenticateScheme = "Bearer";
+			}
+			).AddJwtBearer((options) =>
+			{
+				options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+				{
+					ValidateIssuer = true,
+					ValidateAudience = true,
+					ValidateLifetime = true,
+					ValidateIssuerSigningKey = true,
+					ValidAudience = builder.Configuration["JwtSettings:Audience"],
+					ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"])),
+					ClockSkew = TimeSpan.Zero
+				};
+			}
+			);
+
 			builder.Services.AddAuthorization();
+
+
 			builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
 			{
 				var configuration = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"), true);
