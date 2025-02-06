@@ -44,5 +44,13 @@ namespace Core.Specifications
 		//{
 		//	OrderByDesc = orderByDescExpression;
 		//}
+		public void AddIncludes(Expression<Func<T, object>> includeExpression)
+		{
+			Includes.Add(includeExpression);
+		}
+		public void AddOrderByDesc(Expression<Func<T, object>> orderByDescExpression)
+		{
+			OrderByDesc = orderByDescExpression;
+		}
 	}
 }

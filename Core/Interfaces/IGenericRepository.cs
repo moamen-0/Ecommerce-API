@@ -16,5 +16,12 @@ namespace Core.Interfaces
 		Task<T?> GetWithSpecAsync(ISpecifications<T> spec);
 		Task<IReadOnlyList<T>> GetAllAsync();
 		Task<int> GetCountAsync(ISpecifications<T> spec);
+		void Add(T entity);
+		void Update(T entity);
+		void Delete(T entity);
+		//Task<int> SaveChangesAsync();
+		Task<IReadOnlyList<T>> ListAllAsync();
+		Task<IReadOnlyList<T>>ListAsync(ISpecifications<T> spec);
+
 	}
 }

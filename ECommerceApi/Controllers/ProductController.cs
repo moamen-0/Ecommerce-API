@@ -96,21 +96,41 @@ namespace ECommerceApi.Controllers
 			return Ok(types);
 		}
 
-
 		[HttpPost]
-		public IActionResult Post()
+		public async Task<ActionResult<ProductToReturnDto>> PostProduct(ProductToCreateDto productToCreateDto)
 		{
-			return Ok("This is the response from the Post method");
+			var product = _mapper.Map<ProductToCreateDto, Product>(productToCreateDto);
+			_repo.Add(product);
+			//_repo.SaveChangesAsync();
+			return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
 		}
+
 		[HttpPut("{id}")]
-		public IActionResult Put(int id)
+		public async Task<ActionResult<ProductToReturnDto>> PutProduct(int id, ProductToUpdateDto productToUpdateDto)
 		{
-			return Ok($"This is the response from the Put method with id: {id}");
+			var product = await _repo.GetAsync(id);
+			if (product == null)
+			{
+				return NotFound("Product not found.");
+			}
+			_mapper.Map(productToUpdateDto, product);
+			_repo.Update(product);
+			//_repo.SaveChangesAsync();
+			return Ok(product);
 		}
+
 		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
-			return Ok($"This is the response from the Delete method with id: {id}");
+			var product = _repo.GetAsync(id).Result;
+			if (product == null)
+			{
+				return NotFound("Product not found.");
+			}
+			_repo.Delete(product);
+			//_repo.SaveChangesAsync();
+			return Ok();
+
 		}
 	}
 }
