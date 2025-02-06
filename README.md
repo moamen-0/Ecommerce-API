@@ -10,7 +10,6 @@ This is a powerful and scalable eCommerce API built using **ASP.NET Core**. The 
 - **Cart Functionality**
 - **Order Management** (Checkout, Order Tracking)
 - **Payment Integration**
-- **Admin Panel Endpoints** (Manage Products, Orders, Users)
 - **RESTful API Design**
 - **Role-Based Access Control (RBAC)**
 
@@ -20,5 +19,5 @@ This is a powerful and scalable eCommerce API built using **ASP.NET Core**. The 
 - **Authentication:** JWT Token
 - **ORM:** Entity Framework Core
 - **Payment Gateway:** (Stripe)
-- **Documentation:** Swagger
+- **Documentation:** Psotman, Swagger
 
